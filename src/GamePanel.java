@@ -27,11 +27,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
-	//Rocketship rocketship = new Rocketship(250, 700, 50, 50);
-	//ObjectManager objectmanager = new ObjectManager(rocketship);
+	Rocketship rocketship = new Rocketship(250, 700, 50, 50);
+	ObjectManager objectmanager = new ObjectManager(rocketship);
 	Font titleFont = new Font("Arial", Font.PLAIN, 48);
 	Font miniText = new Font("Arial", Font.PLAIN, 15);
+	Font healthFont = new Font("Impact", Font.PLAIN, 20);
 	int currentState = MENU;
+	int rocketshipHP;
+	int ufoHP;
 	Timer frameDraw;
 	Timer alienSpawn;
 
@@ -71,10 +74,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void updateGameState() {
-		//objectmanager.update();
-		//if(!rocketship.isActive) {
-		//	currentState = END;
-		//}
+		objectmanager.update();
+		if(!rocketship.isActive) {
+			currentState = END;
+		}
 	}
 
 	void updateEndState() {
@@ -82,19 +85,27 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void startGameEasy() {
-		
+		objectmanager.update();
+		rocketshipHP = 50;
+		ufoHP = 50;
 	}
 	
 	void startGameMedium() {
-		
+		objectmanager.update();
+		rocketshipHP = 50;
+		ufoHP = 100;
 	}
 	
 	void startGameHard() {
-		
+		objectmanager.update();
+		rocketshipHP = 50;
+		ufoHP = 150;
 	}
 	
 	void startGameInsane() {
-		
+		objectmanager.update();
+		rocketshipHP = 50;
+		ufoHP = 150;
 	}
 	void drawInstructionsState(Graphics g) {
 		g.setColor(Color.ORANGE);
@@ -170,7 +181,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, Runner.WIDTH, Runner.HEIGHT);
 		}
-		//objectmanager.draw(g);
+		g.setColor(Color.WHITE);
+		g.setFont(healthFont);
+		g.drawString("Your Health: " + rocketshipHP, 10, 33);
+		g.drawString("UFO Health: " + ufoHP, 330, 33);
+		objectmanager.draw(g);
 		g.setFont(miniText);
 		g.setColor(Color.WHITE);
 		//g.drawString(String.valueOf(objectmanager.getScore()), 100, 100);
@@ -207,7 +222,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 			if(currentState == END) {
-				//rocketship = new Rocketship(250, 700, 50, 50);
+				rocketship = new Rocketship(250, 700, 50, 50);
 			}
 			if (currentState == END) {
 				currentState = MENU;
@@ -234,15 +249,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 			
 		}
-		
+			if(arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+				if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+					objectmanager.addProjectile(rocketship.getProjectile());
+				}
+			}
 			if(arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
 				if(currentState == INSTRUCTIONS || currentState == MENU || currentState == EASY || currentState == MEDIUM || currentState == HARD) {
 					currentState++;
+				} else if(currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD || currentState == GAMEINSANE) {
+					rocketship.right();
 				}
 			}
 			if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
 				if(currentState == MENU || currentState == EASY || currentState == MEDIUM || currentState == HARD || currentState == INSANE) {
 					currentState--;
+				} else if(currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD || currentState == GAMEINSANE) {
+					rocketship.left();
 				}
 			}
 	}
