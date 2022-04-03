@@ -6,13 +6,16 @@ import java.util.Random;
 
 public class ObjectManager implements ActionListener{
 Rocketship rocket;
+UFO ufo;
 ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 //ArrayList<Alien> aliens = new ArrayList<Alien>();
 Random random = new Random();
 int score = 0;
-ObjectManager(Rocketship rocket) {
+ObjectManager(Rocketship rocket, UFO ufo) {
 	this.rocket = rocket;
+	this.ufo = ufo;
 }
+
 void addProjectile(Projectile projectile) {
 	projectiles.add(projectile);
 }
@@ -41,9 +44,7 @@ void addAlien() {
 }
 	void draw(Graphics g) {
 		rocket.draw(g);
-		//for(Alien alien : aliens) {
-			//alien.draw(g);
-		//}
+		ufo.draw(g);
 		for(Projectile projectile : projectiles) {
 			projectile.draw(g);
 		}
@@ -67,14 +68,19 @@ void addAlien() {
 				//alien.isActive = false;
 				//rocket.isActive = false;
 		//	}
-			//for(Projectile projectile: projectiles) {
-				//if(alien.collisionBox.intersects(projectile.collisionBox)) {
-					//projectile.isActive = false;
-					//alien.isActive = false;
-					//score++;
-				//}
+			for(Projectile projectile: projectiles) {
+				if(ufo.collisionBox.intersects(projectile.collisionBox)) {
+					projectile.isActive = false;
+					System.out.println("ufo has been hit");
+					if(ufo.ufoHP == 1) {
+						ufo.isActive = false;
+					} else {
+					ufo.ufoHP--;
+					score++;
+					}
+				}
 			//}
-		//}
+		}
 	}
 	public int getScore() {
 		return score;
