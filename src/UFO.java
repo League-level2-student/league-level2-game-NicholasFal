@@ -25,10 +25,11 @@ public class UFO extends GameObject{
 		} else if(x > 200) {
 			x-=1;
 			y-=1;
-		} else if(x<199) {
-			x+=1;
+		} else if(x<=200) {
+			x-=1;
 			y+=1;
 		}
+		update();
 	}
 	void draw(Graphics g) {
 		g.setColor(Color.YELLOW);

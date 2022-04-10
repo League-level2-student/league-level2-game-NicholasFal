@@ -37,7 +37,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	int currentState = MENU;
 	int rocketshipHP;
 	Timer frameDraw;
-	Timer alienSpawn;
+	// Timer alienSpawn;
+	Timer meteorSpawn;
 
 	GamePanel() {
 		frameDraw = new Timer(1000 / 60, this);
@@ -49,7 +50,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		if(currentState == INSTRUCTIONS) {
+		if (currentState == INSTRUCTIONS) {
 			drawInstructionsState(g);
 		} else if (currentState == MENU) {
 			drawMenuState(g);
@@ -57,20 +58,21 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawGameState(g);
 		} else if (currentState == END) {
 			drawEndState(g);
-		} else if(currentState == EASY) {
+			meteorSpawn.stop();
+		} else if (currentState == EASY) {
 			drawEasyState(g);
-		} else if(currentState == MEDIUM) {
+		} else if (currentState == MEDIUM) {
 			drawMediumState(g);
-		} else if(currentState == HARD) {
+		} else if (currentState == HARD) {
 			drawHardState(g);
-		} else if(currentState == INSANE) {
+		} else if (currentState == INSANE) {
 			drawInsaneState(g);
-		} else if(currentState == VICTORY) {
+		} else if (currentState == VICTORY) {
 			drawVictoryState(g);
+			meteorSpawn.stop();
 		}
-		
-		}
-	
+
+	}
 
 	void updateMenuState() {
 
@@ -79,9 +81,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void updateGameState() {
 		objectmanager.update();
 		ufo.movement();
-		if(!rocketship.isActive) {
+		if (!rocketship.isActive) {
 			currentState = END;
-		} else if(!ufo.isActive) {
+		} else if (!ufo.isActive) {
 			currentState = VICTORY;
 		}
 	}
@@ -92,27 +94,37 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void startGameEasy() {
 		objectmanager.update();
-		rocketshipHP = 50;
+		rocketship.rocketHP = 50;
 		ufo.ufoHP = 50;
+		meteorSpawn = new Timer(5000, objectmanager);
+		meteorSpawn.start();
 	}
-	
+
 	void startGameMedium() {
 		objectmanager.update();
-		rocketshipHP = 50;
+		rocketship.rocketHP = 50;
 		ufo.ufoHP = 100;
+		meteorSpawn = new Timer(5000, objectmanager);
+		meteorSpawn.start();
 	}
-	
+
 	void startGameHard() {
 		objectmanager.update();
-		rocketshipHP = 50;
+		rocketship.rocketHP = 50;
 		ufo.ufoHP = 150;
+		meteorSpawn = new Timer(5000, objectmanager);
+		meteorSpawn.start();
+		System.out.println("start game easy");
 	}
-	
+
 	void startGameInsane() {
 		objectmanager.update();
-		rocketshipHP = 50;
+		rocketship.rocketHP = 50;
 		ufo.ufoHP = 150;
+		meteorSpawn = new Timer(5000, objectmanager);
+		meteorSpawn.start();
 	}
+
 	void drawInstructionsState(Graphics g) {
 		g.setColor(Color.ORANGE);
 		g.fillRect(0, 0, Runner.WIDTH, Runner.HEIGHT);
@@ -125,6 +137,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Controls: Press a to move left, d to move right, and space to", 10, 350);
 		g.drawString("shoot a bullet.", 10, 400);
 	}
+
 	void drawMenuState(Graphics g) {
 		g.setColor(Color.BLUE);
 		g.fillRect(0, 0, Runner.WIDTH, Runner.HEIGHT);
@@ -136,6 +149,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press LEFT ARROW to view the instructions", 90, 200);
 		g.drawString("Press RIGHT ARROW to view Easy Mode", 100, 300);
 	}
+
 	void drawEasyState(Graphics g) {
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, Runner.WIDTH, Runner.HEIGHT);
@@ -148,6 +162,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press ENTER to play Space Boss in Easy Mode", 77, 300);
 		g.drawString("Press RIGHT ARROW to view Medium Mode", 90, 400);
 	}
+
 	void drawMediumState(Graphics g) {
 		g.setColor(Color.YELLOW);
 		g.fillRect(0, 0, Runner.WIDTH, Runner.HEIGHT);
@@ -159,6 +174,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press ENTER to play Space Boss in Medium Mode", 60, 300);
 		g.drawString("Press RIGHT ARROW to view Hard Mode", 100, 400);
 	}
+
 	void drawHardState(Graphics g) {
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, Runner.WIDTH, Runner.HEIGHT);
@@ -170,6 +186,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press ENTER to play Space Boss in Hard Mode", 70, 300);
 		g.drawString("Press RIGHT ARROW to view Insane Mode", 90, 400);
 	}
+
 	void drawInsaneState(Graphics g) {
 		g.setColor(Color.MAGENTA);
 		g.fillRect(0, 0, Runner.WIDTH, Runner.HEIGHT);
@@ -180,6 +197,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press LEFT ARROW to view Hard Mode", 100, 200);
 		g.drawString("Press ENTER to play Space Boss in Insane Mode", 70, 300);
 	}
+
 	void drawGameState(Graphics g) {
 		if (gotImage) {
 			g.drawImage(image, 0, 0, Runner.WIDTH, Runner.HEIGHT, null);
@@ -189,12 +207,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 		g.setColor(Color.WHITE);
 		g.setFont(healthFont);
-		g.drawString("Your Health: " + rocketshipHP, 10, 33);
+		g.drawString("Your Health: " + rocketship.rocketHP, 10, 33);
 		g.drawString("UFO Health: " + ufo.ufoHP, 330, 33);
 		objectmanager.draw(g);
 		g.setFont(miniText);
 		g.setColor(Color.WHITE);
-		//g.drawString(String.valueOf(objectmanager.getScore()), 100, 100);
+		// g.drawString(String.valueOf(objectmanager.getScore()), 100, 100);
 	}
 
 	void drawEndState(Graphics g) {
@@ -205,13 +223,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Game Over", 100, 100);
 		g.setFont(miniText);
 		g.setColor(Color.YELLOW);
-		//g.drawString("You killed "  + objectmanager.getScore() + " enemies", 200, 300);
+		// g.drawString("You killed " + objectmanager.getScore() + " enemies", 200,
+		// 300);
 		g.drawString("Press ENTER to restart", 180, 400);
 	}
-	
+
 	void drawVictoryState(Graphics g) {
 		g.setColor(Color.YELLOW);
-		g.fillRect(0,  0, Runner.WIDTH, Runner.HEIGHT);
+		g.fillRect(0, 0, Runner.WIDTH, Runner.HEIGHT);
 		g.setFont(titleFont);
 		g.setColor(Color.GRAY);
 		g.drawString("You Won!", 120, 100);
@@ -238,7 +257,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-			if(currentState == END) {
+			if (currentState == END) {
 				rocketship = new Rocketship(250, 700, 50, 50);
 				ufo = new UFO(10, 400, 100, 100);
 			}
@@ -248,44 +267,48 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				if (currentState == EASY) {
 					currentState = GAMEEASY;
 					startGameEasy();
-				} else if(currentState == MEDIUM) {
+				} else if (currentState == MEDIUM) {
 					currentState = GAMEMEDIUM;
 					startGameMedium();
-				} else if(currentState == HARD) {
+				} else if (currentState == HARD) {
 					currentState = GAMEHARD;
 					startGameHard();
-				} else if(currentState == INSANE) {
+				} else if (currentState == INSANE) {
 					currentState = GAMEINSANE;
 					startGameInsane();
 				}
-				{
-				if(currentState == GAMEEASY) {
-					alienSpawn.stop();
-					}
-					currentState++;
+				else {
+				// if(currentState == GAMEEASY) {
+				// alienSpawn.stop();
+				// }
+				currentState++;
 				}
 			}
-			
+			System.out.println(currentState);
 		}
-			if(arg0.getKeyCode() == KeyEvent.VK_SPACE) {
-				if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
-					objectmanager.addProjectile(rocketship.getProjectile());
-				}
+		if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+			if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+				objectmanager.addProjectile(rocketship.getProjectile());
 			}
-			if(arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
-				if(currentState == INSTRUCTIONS || currentState == MENU || currentState == EASY || currentState == MEDIUM || currentState == HARD) {
-					currentState++;
-				} else if(currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD || currentState == GAMEINSANE) {
-					rocketship.right();
-				}
+		}
+		if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+			if (currentState == INSTRUCTIONS || currentState == MENU || currentState == EASY || currentState == MEDIUM
+					|| currentState == HARD) {
+				currentState++;
+			} else if (currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD
+					|| currentState == GAMEINSANE) {
+				rocketship.right();
 			}
-			if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
-				if(currentState == MENU || currentState == EASY || currentState == MEDIUM || currentState == HARD || currentState == INSANE) {
-					currentState--;
-				} else if(currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD || currentState == GAMEINSANE) {
-					rocketship.left();
-				}
+		}
+		if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+			if (currentState == MENU || currentState == EASY || currentState == MEDIUM || currentState == HARD
+					|| currentState == INSANE) {
+				currentState--;
+			} else if (currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD
+					|| currentState == GAMEINSANE) {
+				rocketship.left();
 			}
+		}
 	}
 
 	void loadImage(String imageFile) {
