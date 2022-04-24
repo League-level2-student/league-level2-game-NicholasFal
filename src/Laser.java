@@ -4,39 +4,31 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class Rocketship extends GameObject{
+public class Laser extends GameObject {
 	public static BufferedImage image;
 	public static boolean needImage = true;
-	public static boolean gotImage = false;
-	int rocketHP;
-	Rocketship(int x, int y, int width, int height) {
+	public static boolean gotImage = false;	
+	Laser(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 10;
+		speed = 8;
 		if (needImage) {
-		    loadImage ("rocketship.png");
+		    loadImage("laser.png");
 		}
 	}
+	void update() {
+		y+=speed;
+		super.update();
+	}
 	void draw(Graphics g) {
-		g.setColor(Color.BLUE);
+        g.setColor(Color.ORANGE);
         g.fillRect(x, y, width, height);
         if (gotImage) {
-        	g.drawImage(image, x, y, width, height, null);
+        g.drawImage(image, x, y, width, height, null);
         } else {
         	g.setColor(Color.BLUE);
         	g.fillRect(x, y, width, height);
-        }
-	}
-	public void up() {
-		y -= speed;
-	}
-	public void right() {
-		x += speed;
-	}
-	public void down() {
-		y += speed;
-	}
-	public void left() {
-		x -= speed;
+        }	
+
 	}
 	void loadImage(String imageFile) {
 	    if (needImage) {
@@ -49,8 +41,4 @@ public class Rocketship extends GameObject{
 	        needImage = false;
 	    }
 	}
-	public Projectile getProjectile() {
-        return new Projectile(x+width/2, y, 10, 10);
-} 
-	
 }

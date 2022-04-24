@@ -52,4 +52,7 @@ public class UFO extends GameObject{
 	        needImage = false;
 	    }
 	}
+	public Laser getLaser() {
+		return new Laser(x+width/2, y, 20, 50);
+	}
 }

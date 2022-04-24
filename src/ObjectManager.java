@@ -9,6 +9,8 @@ Rocketship rocket;
 UFO ufo;
 ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 ArrayList<Meteor> meteors = new ArrayList<Meteor>();
+ArrayList<Laser> lasers = new ArrayList<Laser>();
+Random ran = new Random();
 //ArrayList<Alien> aliens = new ArrayList<Alien>();
 Random random = new Random();
 int score = 0;
@@ -21,7 +23,10 @@ void addProjectile(Projectile projectile) {
 	projectiles.add(projectile);
 }
 void addMeteor() {
-	meteors.add(new Meteor(random.nextInt(Runner.WIDTH),0,50,50));
+	meteors.add(new Meteor(random.nextInt(Runner.WIDTH),0,75,75));
+}
+void addLaser(Laser laser) {
+	lasers.add(laser);
 }
 void addAlien() {
 	//aliens.add(new Alien(random.nextInt(LeagueInvaders.WIDTH),0,50,50));
@@ -46,6 +51,12 @@ void addAlien() {
 			meteor.isActive = false;
 		}
 	}
+	for(Laser laser : lasers) {
+		laser.update();
+		if(laser.y <= 0) {
+			laser.isActive = false;
+		}
+	}
 	rocket.update();
 	if(rocket.isActive) {
 	checkCollision();
@@ -60,6 +71,9 @@ void addAlien() {
 		}
 		for(Meteor meteor : meteors) {
 			meteor.draw(g);
+		}
+		for(Laser laser : lasers) {
+			laser.draw(g);
 		}
 	}
 	void purgeObjects() {
@@ -76,6 +90,11 @@ void addAlien() {
 		for(int i = meteors.size() - 1; i >= 0; i--) {
 			if(!meteors.get(i).isActive) {
 				meteors.remove(i);
+			}
+		}
+		for(int i = lasers.size() - 1; i >= 0; i--) {
+			if(!lasers.get(i).isActive) {
+				lasers.remove(i);
 			}
 		}
 		
@@ -102,10 +121,21 @@ void addAlien() {
 				if(rocket.collisionBox.intersects(meteor.collisionBox)) {
 					meteor.isActive = false;
 					System.out.println("you have been hit with a meteor");
-					if(rocket.rocketHP < 4) {
+					if(rocket.rocketHP < 6) {
 						rocket.isActive = false;
 					} else {
-						rocket.rocketHP-= 3;
+						rocket.rocketHP-= 5;
+					}
+				}
+			}
+			for(Laser laser : lasers) {
+				if(rocket.collisionBox.intersects(laser.collisionBox)) {
+					laser.isActive = false;
+					System.out.println("you have been hit with a laser");
+					if(rocket.rocketHP < 2) {
+						rocket.isActive = false;
+					} else {
+						rocket.rocketHP -= 1;
 					}
 				}
 			}
@@ -117,6 +147,10 @@ void addAlien() {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		if(arg0.getSource() == GamePanel.meteorSpawn) {
 		addMeteor();
+		} else if(arg0.getSource() == GamePanel.laserSpawn){
+			addLaser(ufo.getLaser());
+		}
 	}
 }
