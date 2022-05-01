@@ -40,6 +40,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	// Timer alienSpawn;
 	static Timer meteorSpawn;
 	static Timer laserSpawn;
+	static Timer alienSpawn;
 
 	GamePanel() {
 		frameDraw = new Timer(1000 / 60, this);
@@ -67,6 +68,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawEndState(g);
 			meteorSpawn.stop();
 			laserSpawn.stop();
+			alienSpawn.stop();
 		} else if (currentState == EASY) {
 			drawEasyState(g);
 		} else if (currentState == MEDIUM) {
@@ -79,6 +81,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawVictoryState(g);
 			meteorSpawn.stop();
 			laserSpawn.stop();
+			alienSpawn.stop();
 		}
 
 	}
@@ -103,7 +106,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void startGameEasy() {
 		objectmanager.update();
-		rocketship.rocketHP = 10;
+		rocketship.rocketHP = 50;
 		ufo.ufoHP = 50;
 		meteorSpawn = new Timer(2500, objectmanager);
 		laserSpawn = new Timer(750, objectmanager);
@@ -115,10 +118,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		objectmanager.update();
 		rocketship.rocketHP = 50;
 		ufo.ufoHP = 100;
-		meteorSpawn = new Timer(10000, objectmanager);
-		laserSpawn = new Timer(1500, objectmanager);
+		meteorSpawn = new Timer(2000, objectmanager);
+		laserSpawn = new Timer(500, objectmanager);
+		alienSpawn = new Timer(1500, objectmanager);
 		meteorSpawn.start();
 		laserSpawn.start();
+		alienSpawn.start();
 	}
 
 	void startGameHard() {
@@ -127,8 +132,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		ufo.ufoHP = 150;
 		meteorSpawn = new Timer(10000, objectmanager);
 		laserSpawn = new Timer(1500, objectmanager);
+		alienSpawn = new Timer(1500, objectmanager);
 		meteorSpawn.start();
 		laserSpawn.start();
+		alienSpawn.start();
 	}
 
 	void startGameInsane() {
@@ -137,8 +144,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		ufo.ufoHP = 150;
 		meteorSpawn = new Timer(10000, objectmanager);
 		laserSpawn = new Timer(1500, objectmanager);
+		alienSpawn = new Timer(1500, objectmanager);
 		meteorSpawn.start();
 		laserSpawn.start();
+		alienSpawn.start();
 	}
 
 	void drawInstructionsState(Graphics g) {
@@ -261,7 +270,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		if (currentState == MENU) {
 			updateMenuState();
-		} else if (currentState == GAMEEASY) {
+		} else if (currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD || currentState == GAMEINSANE) {
 			updateGameState();
 		} else if (currentState == END) {
 			updateEndState();

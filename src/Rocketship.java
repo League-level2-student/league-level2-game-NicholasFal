@@ -1,13 +1,18 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 
-public class Rocketship extends GameObject{
+public class Rocketship extends GameObject implements ActionListener{
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
+	Timer invincibility = new Timer(1000, this);
+	Boolean invincible = false;
 	int rocketHP;
 	Rocketship(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -51,6 +56,16 @@ public class Rocketship extends GameObject{
 	}
 	public Projectile getProjectile() {
         return new Projectile(x+width/2, y, 10, 10);
-} 
+}
+	public void startInvincibility() {
+		invincibility.start();
+		invincible = true;
+	}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		invincibility.stop();
+		invincible = false;
+	} 
 	
 }

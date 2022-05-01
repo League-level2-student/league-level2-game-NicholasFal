@@ -10,8 +10,8 @@ UFO ufo;
 ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 ArrayList<Meteor> meteors = new ArrayList<Meteor>();
 ArrayList<Laser> lasers = new ArrayList<Laser>();
+ArrayList<Alien> aliens = new ArrayList<Alien>();
 Random ran = new Random();
-//ArrayList<Alien> aliens = new ArrayList<Alien>();
 Random random = new Random();
 int score = 0;
 ObjectManager(Rocketship rocket, UFO ufo) {
@@ -28,17 +28,11 @@ void addMeteor() {
 void addLaser(Laser laser) {
 	lasers.add(laser);
 }
-void addAlien() {
-	//aliens.add(new Alien(random.nextInt(LeagueInvaders.WIDTH),0,50,50));
+void addAlien(Alien alien) {
+	aliens.add(alien);
 }
 
 	void update() {
-	//for(Alien alien : aliens) {
-		//alien.update();
-		//if(alien.y >= LeagueInvaders.HEIGHT) {
-		//	alien.isActive = false;
-		//}
-	//}
 	for(Projectile projectile : projectiles) {
 		projectile.update();
 		if(projectile.y <= 0) {
@@ -55,6 +49,13 @@ void addAlien() {
 		laser.update();
 		if(laser.y <= 0) {
 			laser.isActive = false;
+		}
+	}
+	for(Alien alien : aliens) {
+		alien.update();
+		alien.rocketX = rocket.x;
+		if(alien.y <= 0) {
+			alien.isActive = false;
 		}
 	}
 	rocket.update();
@@ -75,13 +76,11 @@ void addAlien() {
 		for(Laser laser : lasers) {
 			laser.draw(g);
 		}
+		for(Alien alien : aliens) {
+			alien.draw(g);
+		}
 	}
 	void purgeObjects() {
-		//for(int i = aliens.size() - 1; i >= 0; i--) {
-			//if(!aliens.get(i).isActive) {
-				//aliens.remove(i);
-			//}
-		//}
 		for(int i = projectiles.size() - 1; i >= 0; i--) {
 			if (!projectiles.get(i).isActive) {
 				projectiles.remove(i);
@@ -95,6 +94,11 @@ void addAlien() {
 		for(int i = lasers.size() - 1; i >= 0; i--) {
 			if(!lasers.get(i).isActive) {
 				lasers.remove(i);
+			}
+		}
+		for(int i = aliens.size() - 1; i >= 0; i--) {
+			if(!aliens.get(i).isActive) {
+				aliens.remove(i);
 			}
 		}
 		
@@ -139,6 +143,17 @@ void addAlien() {
 					}
 				}
 			}
+			for(Alien alien : aliens) {
+				if(rocket.collisionBox.intersects(alien.collisionBox)) {
+					System.out.println("you have been attacked by an alien");
+					if(rocket.rocketHP < 2) {
+						rocket.isActive = false;
+					} else if(!rocket.invincible){
+						rocket.rocketHP -= aliens.size();
+						rocket.startInvincibility();
+					}
+				}
+			}
 	}
 	public int getScore() {
 		return score;
@@ -149,8 +164,12 @@ void addAlien() {
 		// TODO Auto-generated method stub
 		if(arg0.getSource() == GamePanel.meteorSpawn) {
 		addMeteor();
-		} else if(arg0.getSource() == GamePanel.laserSpawn){
+		} 
+		if(arg0.getSource() == GamePanel.laserSpawn){
 			addLaser(ufo.getLaser());
+		}
+		if(arg0.getSource() == GamePanel.alienSpawn) {
+			addAlien(ufo.getAlien());
 		}
 	}
 }
