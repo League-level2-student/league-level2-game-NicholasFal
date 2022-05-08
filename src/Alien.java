@@ -9,15 +9,17 @@ public class Alien extends GameObject{
 	public static boolean needImage = true;
 	public static boolean gotImage = false;	
 	int rocketX;
-	Alien(int x, int y, int width, int height) {
+	int alienHP;
+	Alien(int x, int y, int width, int height, int alienHP) {
 		super(x, y, width, height);
-		speed = 5;
+		speed = 3;
+		this.alienHP = alienHP;
 		if (needImage) {
 		    loadImage ("alien.png");
 		}
 	}
 	void update() {
-		if(y<660) {
+		if(y<630) {
 		y+=speed;
 		}
 		if(x<rocketX) {

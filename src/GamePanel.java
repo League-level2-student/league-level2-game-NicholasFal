@@ -79,9 +79,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawInsaneState(g);
 		} else if (currentState == VICTORY) {
 			drawVictoryState(g);
-			meteorSpawn.stop();
-			laserSpawn.stop();
-			alienSpawn.stop();
 		}
 
 	}
@@ -96,6 +93,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (!rocketship.isActive) {
 			currentState = END;
 		} else if (!ufo.isActive) {
+			if(currentState != GAMEEASY) {
+				alienSpawn.stop();
+			}
+			meteorSpawn.stop();
+			laserSpawn.stop();
 			currentState = VICTORY;
 		}
 	}
@@ -118,9 +120,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		objectmanager.update();
 		rocketship.rocketHP = 50;
 		ufo.ufoHP = 100;
-		meteorSpawn = new Timer(2000, objectmanager);
+		meteorSpawn = new Timer(2250, objectmanager);
 		laserSpawn = new Timer(500, objectmanager);
-		alienSpawn = new Timer(1500, objectmanager);
+		alienSpawn = new Timer(25000, objectmanager);
 		meteorSpawn.start();
 		laserSpawn.start();
 		alienSpawn.start();
@@ -130,9 +132,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		objectmanager.update();
 		rocketship.rocketHP = 50;
 		ufo.ufoHP = 150;
-		meteorSpawn = new Timer(10000, objectmanager);
-		laserSpawn = new Timer(1500, objectmanager);
-		alienSpawn = new Timer(1500, objectmanager);
+		meteorSpawn = new Timer(2000, objectmanager);
+		laserSpawn = new Timer(350, objectmanager);
+		alienSpawn = new Timer(20000, objectmanager);
 		meteorSpawn.start();
 		laserSpawn.start();
 		alienSpawn.start();
@@ -141,10 +143,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void startGameInsane() {
 		objectmanager.update();
 		rocketship.rocketHP = 50;
-		ufo.ufoHP = 150;
-		meteorSpawn = new Timer(10000, objectmanager);
-		laserSpawn = new Timer(1500, objectmanager);
-		alienSpawn = new Timer(1500, objectmanager);
+		ufo.ufoHP = 200;
+		meteorSpawn = new Timer(1500, objectmanager);
+		laserSpawn = new Timer(100, objectmanager);
+		alienSpawn = new Timer(15000, objectmanager);
 		meteorSpawn.start();
 		laserSpawn.start();
 		alienSpawn.start();
@@ -314,7 +316,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 		if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
 			if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
-				objectmanager.addProjectile(rocketship.getProjectile());
+				rocketship.shooting = true;
 			}
 		}
 		if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -323,7 +325,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				currentState++;
 			} else if (currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD
 					|| currentState == GAMEINSANE) {
-				rocketship.right();
+				rocketship.right = true;
 			}
 		}
 		if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -332,7 +334,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				currentState--;
 			} else if (currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD
 					|| currentState == GAMEINSANE) {
-				rocketship.left();
+				rocketship.left = true;
 			}
 		}
 	}
@@ -352,7 +354,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-
+		if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+			rocketship.left = false;
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+			rocketship.right = false;
+		}
+		if(arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+			rocketship.shooting = false;
+		}
 	}
 
 	@Override

@@ -11,12 +11,17 @@ public class Rocketship extends GameObject implements ActionListener{
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
+	public boolean left = false;
+	public boolean right = false;
+	public boolean shooting = false;
+	public boolean shootingCooldown = false;
 	Timer invincibility = new Timer(1000, this);
+	Timer shootingTimer = new Timer(300, this);
 	Boolean invincible = false;
 	int rocketHP;
 	Rocketship(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		speed = 10;
+		speed = 3;
 		if (needImage) {
 		    loadImage ("rocketship.png");
 		}
@@ -31,15 +36,21 @@ public class Rocketship extends GameObject implements ActionListener{
         	g.fillRect(x, y, width, height);
         }
 	}
-	public void up() {
-		y -= speed;
-	}
+	
 	public void right() {
 		x += speed;
 	}
-	public void down() {
-		y += speed;
+	public void update() {
+		super.update();
+		if(left) {
+			left();
+		}
+		if(right) {
+			right();
+		} 
 	}
+	
+	
 	public void left() {
 		x -= speed;
 	}
@@ -55,7 +66,9 @@ public class Rocketship extends GameObject implements ActionListener{
 	    }
 	}
 	public Projectile getProjectile() {
-        return new Projectile(x+width/2, y, 10, 10);
+       shootingTimer.start();
+       shootingCooldown = true;
+		return new Projectile(x+width/2, y, 10, 10);
 }
 	public void startInvincibility() {
 		invincibility.start();
@@ -64,8 +77,14 @@ public class Rocketship extends GameObject implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		if(arg0.getSource() == invincibility) {
 		invincibility.stop();
 		invincible = false;
+		}
+		if(arg0.getSource() == shootingTimer) {
+		shootingTimer.stop();
+		shootingCooldown = false;
+		}
 	} 
 	
 }

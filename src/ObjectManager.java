@@ -59,6 +59,9 @@ void addAlien(Alien alien) {
 		}
 	}
 	rocket.update();
+	if(rocket.shooting && !rocket.shootingCooldown) {
+		addProjectile(rocket.getProjectile());
+	}
 	if(rocket.isActive) {
 	checkCollision();
 	purgeObjects();
@@ -151,6 +154,16 @@ void addAlien(Alien alien) {
 					} else if(!rocket.invincible){
 						rocket.rocketHP -= aliens.size();
 						rocket.startInvincibility();
+					}
+				}
+				for(Projectile projectile :projectiles) {
+					if(alien.collisionBox.intersects(projectile.collisionBox)) {
+						projectile.isActive = false;
+						if(alien.alienHP < 2) {
+							alien.isActive = false;
+						} else {
+							alien.alienHP--;
+						}
 					}
 				}
 			}

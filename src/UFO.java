@@ -56,6 +56,6 @@ public class UFO extends GameObject{
 		return new Laser(x+width/2, y, 20, 50);
 	}
 	public Alien getAlien() {
-		return new Alien(x+width/2, y, 50, 50);
+		return new Alien(x+width/2, y, 80, 80, 12);
 	}
 }
