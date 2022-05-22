@@ -41,20 +41,20 @@ void addAlien(Alien alien) {
 	}
 	for(Meteor meteor : meteors) {
 		meteor.update();
-		if(meteor.y <= 0) {
+		if(meteor.y >= Runner.HEIGHT) {
 			meteor.isActive = false;
 		}
 	}
 	for(Laser laser : lasers) {
 		laser.update();
-		if(laser.y <= 0) {
+		if(laser.y >= Runner.HEIGHT) {
 			laser.isActive = false;
 		}
 	}
 	for(Alien alien : aliens) {
 		alien.update();
 		alien.rocketX = rocket.x;
-		if(alien.y <= 0) {
+		if(alien.y >= Runner.HEIGHT) {
 			alien.isActive = false;
 		}
 	}

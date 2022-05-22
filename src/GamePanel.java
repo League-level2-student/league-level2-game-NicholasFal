@@ -66,9 +66,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawGameState(g);
 		} else if (currentState == END) {
 			drawEndState(g);
-			meteorSpawn.stop();
-			laserSpawn.stop();
-			alienSpawn.stop();
 		} else if (currentState == EASY) {
 			drawEasyState(g);
 		} else if (currentState == MEDIUM) {
@@ -92,13 +89,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		ufo.movement();
 		if (!rocketship.isActive) {
 			currentState = END;
+			meteorSpawn.stop();
+			laserSpawn.stop();
 		} else if (!ufo.isActive) {
 			if(currentState != GAMEEASY) {
 				alienSpawn.stop();
 			}
+			currentState = VICTORY;
 			meteorSpawn.stop();
 			laserSpawn.stop();
-			currentState = VICTORY;
 		}
 	}
 
@@ -265,6 +264,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setFont(miniText);
 		g.setColor(Color.GRAY);
 		g.drawString("You had " + rocketship.rocketHP + " HP remaining.", 133, 200);
+		g.drawString("Press ENTER to restart", 150, 300);
 	}
 
 	@Override
@@ -273,6 +273,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (currentState == MENU) {
 			updateMenuState();
 		} else if (currentState == GAMEEASY || currentState == GAMEMEDIUM || currentState == GAMEHARD || currentState == GAMEINSANE) {
+			//System.out.println("game state has been updated");
 			updateGameState();
 		} else if (currentState == END) {
 			updateEndState();
@@ -285,11 +286,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (currentState == END) {
+			if (currentState == END || currentState == VICTORY) {
 				rocketship = new Rocketship(250, 700, 50, 50);
 				ufo = new UFO(10, 400, 100, 100);
+				objectmanager = new ObjectManager(rocketship, ufo);
 			}
-			if (currentState == END) {
+			if (currentState == END || currentState == VICTORY) {
 				currentState = MENU;
 			} else {
 				if (currentState == EASY) {
@@ -354,6 +356,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+		System.out.println("hi");
 		if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
 			rocketship.left = false;
 		}
