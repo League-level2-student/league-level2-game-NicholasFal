@@ -115,7 +115,6 @@ void addAlien(Alien alien) {
 			for(Projectile projectile: projectiles) {
 				if(ufo.collisionBox.intersects(projectile.collisionBox)) {
 					projectile.isActive = false;
-					System.out.println("ufo has been hit");
 					if(ufo.ufoHP == 1) {
 						ufo.isActive = false;
 					} else {
@@ -127,7 +126,6 @@ void addAlien(Alien alien) {
 			for(Meteor meteor : meteors) {
 				if(rocket.collisionBox.intersects(meteor.collisionBox)) {
 					meteor.isActive = false;
-					System.out.println("you have been hit with a meteor");
 					if(rocket.rocketHP < 6) {
 						rocket.isActive = false;
 					} else {
@@ -138,7 +136,6 @@ void addAlien(Alien alien) {
 			for(Laser laser : lasers) {
 				if(rocket.collisionBox.intersects(laser.collisionBox)) {
 					laser.isActive = false;
-					System.out.println("you have been hit with a laser");
 					if(rocket.rocketHP < 2) {
 						rocket.isActive = false;
 					} else {
@@ -148,7 +145,6 @@ void addAlien(Alien alien) {
 			}
 			for(Alien alien : aliens) {
 				if(rocket.collisionBox.intersects(alien.collisionBox)) {
-					System.out.println("you have been attacked by an alien");
 					if(rocket.rocketHP < 2) {
 						rocket.isActive = false;
 					} else if(!rocket.invincible){

@@ -38,7 +38,9 @@ public class Rocketship extends GameObject implements ActionListener{
 	}
 	
 	public void right() {
+		if(x < 500) {
 		x += speed;
+		}
 	}
 	public void update() {
 		super.update();
@@ -52,7 +54,9 @@ public class Rocketship extends GameObject implements ActionListener{
 	
 	
 	public void left() {
+		if(x > -52) {
 		x -= speed;
+		}
 	}
 	void loadImage(String imageFile) {
 	    if (needImage) {

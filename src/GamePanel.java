@@ -143,9 +143,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		objectmanager.update();
 		rocketship.rocketHP = 50;
 		ufo.ufoHP = 200;
-		meteorSpawn = new Timer(1500, objectmanager);
-		laserSpawn = new Timer(100, objectmanager);
-		alienSpawn = new Timer(15000, objectmanager);
+		meteorSpawn = new Timer(1750, objectmanager);
+		laserSpawn = new Timer(225, objectmanager);
+		alienSpawn = new Timer(17500, objectmanager);
 		meteorSpawn.start();
 		laserSpawn.start();
 		alienSpawn.start();
@@ -160,7 +160,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setFont(miniText);
 		g.drawString("Objective: You are a rocket flying through space while trying to kill ", 10, 200);
 		g.drawString("a UFO before it kills you. Dodge meteors, lasers, etc.", 10, 250);
-		g.drawString("Controls: Press a to move left, d to move right, and space to", 10, 350);
+		g.drawString("Controls: Use the arrow keys to move left and right, and space to", 10, 350);
 		g.drawString("shoot a bullet.", 10, 400);
 	}
 
@@ -356,7 +356,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("hi");
 		if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
 			rocketship.left = false;
 		}
